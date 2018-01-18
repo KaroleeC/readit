@@ -6,8 +6,8 @@ const subsController = require('../controllers/subsController');
 const router = express.Router();
 
 router
-  .route('/user')
-  .get(userController.getUser)
+  .route('/users')
+  .get(userController.getUsers)
   .post(userController.createUser);
 router
   .route('/subs')

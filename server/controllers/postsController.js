@@ -4,28 +4,27 @@ const postsController = {
   createPosts: (req, res) => {
     posts
       .create({
-        link: req.link,
-        title: req.title,
-        votes: 0,
-        type: req.type,
-        pageid: req.pageid,
-        userid: req.userid,
-        postid: req.postid,
+        link: req.body.link,
+        title: req.body.title,
+        votes: req.body.votes,
+        type: req.body.type,
+        pageid: req.body.pageid,
+        userid: req.body.userid,
+        postid: req.body.postid,
       })
-      .then(posts.findAll({}))
-      .then(data => {
-        console.log('new posts creates');
-        res.status(201).send(data);
+      .then(() => {
+        console.log('New posts creates');
+        res.status(201).send('New post created');
       })
-      .catch(err => console.log('postsController create', err));
+      .catch(err => console.error('postsController create', err));
   },
   getPosts: (req, res) => {
     posts
       .findAll({})
       .then(data => {
-        res.status(201).send(data);
+        res.status(200).send(data);
       })
-      .catch(err => console.log('postsController get', err));
+      .catch(err => console.error('postsController get', err));
   },
 };
 

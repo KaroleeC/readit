@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const database = require('../index');
 // combined posts and comments
-const Posts = database.define('Posts', {
+const posts = database.define('Posts', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -33,4 +33,4 @@ const Posts = database.define('Posts', {
   },
 });
 
-module.exports = Posts;
+module.exports = posts;

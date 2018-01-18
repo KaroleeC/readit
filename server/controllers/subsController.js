@@ -2,24 +2,24 @@ const subs = require('../../db/models/Subs');
 
 const subsController = {
   createSubs: (req, res) => {
+    console.log('***********', req.body);
     subs
       .create({
-        name: req.name,
+        name: req.body.name,
       })
-      .then(subs.findAll({}))
-      .then(data => {
-        console.log('new sub creates');
-        res.status(201).send(data);
+      .then(() => {
+        console.log('New sub created');
+        res.status(201).send('New sub created');
       })
-      .catch(err => console.log('subsController create', err));
+      .catch(err => console.error('subsController create', err));
   },
   getSubs: (req, res) => {
     subs
-      .findAll({})
+      .findAll()
       .then(data => {
-        res.status(201).send(data);
+        res.status(200).send(data);
       })
-      .catch(err => console.log('subsController get', err));
+      .catch(err => console.error('subsController get', err));
   },
 };
 

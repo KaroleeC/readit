@@ -2,7 +2,7 @@
 const Sequelize = require('sequelize');
 const database = require('../index');
 
-const Comments = database.define('Comments', {
+const comments = database.define('Comments', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -18,4 +18,4 @@ const Comments = database.define('Comments', {
   },
 });
 
-module.exports = Comments;
+module.exports = comments;

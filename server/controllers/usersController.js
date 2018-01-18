@@ -2,25 +2,25 @@ const users = require('../../db/models/Users');
 
 const usersController = {
   createUser: (req, res) => {
+    console.log('***********');
     users
       .create({
-        name: req.name,
-        password: req.password,
+        name: req.body.name,
+        password: req.body.password,
       })
-      .then(users.findAll({ where: { name: req.name } }))
-      .then(data => {
+      .then(() => {
         console.log('new user creates');
-        res.status(201).send(data);
+        res.status(201).send('user created');
       })
-      .catch(err => console.log('usersController create', err));
+      .catch(err => console.error('usersController create', err));
   },
-  getUser: (req, res) => {
+  getUsers: (req, res) => {
     users
-      .findAll({ where: { id: req.userid } })
+      .findAll({})
       .then(data => {
-        res.status(201).send(data);
+        res.status(200).send(data);
       })
-      .catch(err => console.log('usersController get', err));
+      .catch(err => console.error('usersController get', err));
   },
 };
 
