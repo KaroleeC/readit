@@ -1,14 +1,12 @@
 import React from 'react';
 import Header from './header';
-import Comment from './displayComment';
+import Login from './login';
 
 function App() {
   return (
-    <div>
-      <h2> App text </h2>
+    <div className="container">
       <Header />
-      <Comment />
     </div>
-  )
+  );
 }
 export default App;

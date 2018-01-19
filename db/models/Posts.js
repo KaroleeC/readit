@@ -8,11 +8,11 @@ const posts = database.define('Posts', {
     autoIncrement: true,
   },
   link: {
-    type: Sequelize.TEXT,
+    type: Sequelize.STRING,
     required: true,
   },
   title: {
-    type: Sequelize.TEXT,
+    type: Sequelize.STRING,
     required: true,
   },
   votes: {
@@ -24,7 +24,7 @@ const posts = database.define('Posts', {
     required: true,
   },
   pageid: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
     required: false,
   },
   postid: {

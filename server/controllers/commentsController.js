@@ -1,24 +1,31 @@
-// const comments = require('../../db/models/Comments');
+const posts = require('../../db/models/Posts');
 
-// const commentsController = {
-//   createComments: (req, res) => {
-//     comments
-//       .create({})
-//       .then(comments.findAll({}))
-//       .then(data => {
-//         console.log('new sub creates');
-//         res.status(201).send(data);
-//       })
-//       .catch(err => console.log('commentsController create', err));
-//   },
-//   getComments: (req, res) => {
-//     comments
-//       .findAll({})
-//       .then(data => {
-//         res.status(201).send(data);
-//       })
-//       .catch(err => console.log('commentsController get', err));
-//   },
-// };
+const commentsController = {
+  createComment: (req, res) => {
+    console.log('createcomment req body', req.body);
+    posts
+      .create({
+        title: req.body.title,
+        votes: req.body.votes,
+        type: req.body.type,
+        userid: req.body.userid,
+        postid: req.body.postid,
+      })
+      .then(() => {
+        console.log(req.body);
+        res.status(201).send('comment created');
+      })
+      .catch(err => console.error('commentsController create', err));
+  },
+  getComment: (req, res) => {
+    console.log('GETCOM REQ.BODY ', req.body);
+    posts
+      .findAll({ where:{ type: 1, postid: req.query.postid } })
+      .then(data => {
+        res.status(200).send(data);
+      })
+      .catch(err => console.error('postsController get', err));
+  },
+};
 
-// module.exports = commentsController;
+module.exports = commentsController;

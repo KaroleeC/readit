@@ -1,7 +1,8 @@
-const posts = require('../../db/models/Subs');
+const posts = require('../../db/models/Posts');
 
 const postsController = {
   createPosts: (req, res) => {
+    console.log('createpost req body', req.body);
     posts
       .create({
         link: req.body.link,
@@ -13,14 +14,15 @@ const postsController = {
         postid: req.body.postid,
       })
       .then(() => {
-        console.log('New posts creates');
-        res.status(201).send('New post created');
+        console.log(req.body);
+        res.status(201).send('post created');
       })
       .catch(err => console.error('postsController create', err));
   },
   getPosts: (req, res) => {
+    console.log('GETPOST REQ.BODY ', req.body);
     posts
-      .findAll({})
+      .findAll({ where:{ pageid: req.query.pageid, type: 0 } })
       .then(data => {
         res.status(200).send(data);
       })

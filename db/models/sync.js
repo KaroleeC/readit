@@ -11,7 +11,7 @@ posts.belongsTo(users);
 users.hasMany(comments);
 comments.belongsTo(users);
 
-users.belongsToMany(subPages, { through: 'userSubs' } );
+users.belongsToMany(subPages, { through: 'userSubs' });
 subPages.belongsToMany(users, { through: 'userSubs' });
 
 subPages.hasMany(posts);
