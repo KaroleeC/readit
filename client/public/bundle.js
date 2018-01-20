@@ -25438,6 +25438,8 @@ var _axios = __webpack_require__(88);
 
 var _axios2 = _interopRequireDefault(_axios);
 
+var _reactRedux = __webpack_require__(297);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25456,12 +25458,34 @@ var SubmitPost = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (SubmitPost.__proto__ || Object.getPrototypeOf(SubmitPost)).call(this, props));
 
     _this.state = {};
+
+    _this.OnSubmitHandler = _this.OnSubmitHandler.bind(_this);
     return _this;
   }
 
   _createClass(SubmitPost, [{
+    key: 'OnSubmitHandler',
+    value: function OnSubmitHandler(event) {
+      var payload = {
+        link: this.refs.URL.value,
+        votes: 0,
+        type: 0,
+        pageid: this.props.pageid,
+        userid: this.props.user.name,
+        title: this.refs.TITLE.value
+      };
+
+      _axios2.default.post('/api/posts', payload).then(function (res) {
+        console.log('POST on submit handler');
+      }).catch(function (err) {
+        console.log('Submit post err', err);
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       return _react2.default.createElement(
         'div',
         null,
@@ -25475,16 +25499,19 @@ var SubmitPost = function (_React$Component) {
           null,
           'URL'
         ),
-        _react2.default.createElement('input', { placeholder: 'Enter your URL' }),
+        _react2.default.createElement('input', { placeholder: 'Enter your URL', ref: 'URL' }),
         _react2.default.createElement(
           'p',
           null,
           'title'
         ),
-        _react2.default.createElement('input', { placeholder: 'Enter your title' }),
+        _react2.default.createElement('input', { placeholder: 'Enter your title', ref: 'TITLE' }),
         _react2.default.createElement(
           'button',
-          null,
+          { onClick: function onClick() {
+              console.log("submit post click");
+              _this2.OnSubmitHandler(event);
+            } },
           ' Submit '
         )
       );
@@ -25494,7 +25521,11 @@ var SubmitPost = function (_React$Component) {
   return SubmitPost;
 }(_react2.default.Component);
 
-exports.default = SubmitPost;
+function mapStateToProps(state) {
+  return { user: state.user };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(SubmitPost);
 
 /***/ }),
 /* 109 */

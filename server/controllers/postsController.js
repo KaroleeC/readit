@@ -2,7 +2,7 @@ const posts = require('../../db/models/Posts');
 
 const postsController = {
   createPosts: (req, res) => {
-    console.log('createpost req body', req.body);
+    console.log('createpost req body', req.payload);
     posts
       .create({
         link: req.body.link,
