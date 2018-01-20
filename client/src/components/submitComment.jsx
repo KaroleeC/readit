@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 // iterate posts grab comment posts
 class SubmitComment extends React.Component {
   constructor(props) {
@@ -32,7 +33,6 @@ class SubmitComment extends React.Component {
         <p> Submit a new comment</p>
         <input placeholder="Enter your comment HERE" ref="TEXT" />
         <button onClick={() => {
-        console.log("submit post click");
         this.OnSubmitHandler(event);
       }}> Submit </button>
       </div>
@@ -40,4 +40,9 @@ class SubmitComment extends React.Component {
   }
 }
 
-export default SubmitComment;
+
+function mapStateToProps(state) {
+  return { user: state.user };
+}
+
+export default connect(mapStateToProps )(SubmitComment);

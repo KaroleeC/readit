@@ -22,6 +22,7 @@ class SubmitPost extends React.Component {
 
     axios.post('/api/posts', payload ).then(res => {
       console.log('POST on submit handler');
+      reRender()
     })
     .catch(err => {
       console.log('Submit post err', err);

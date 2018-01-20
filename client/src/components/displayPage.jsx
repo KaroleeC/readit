@@ -3,14 +3,13 @@ import axios from 'axios';
 import Posts from './displayPost';
 import SubmitPost from './submitPost';
 
-class MainPage extends React.Component {
+class DisplayPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = { posts: [] };
   }
 
   componentDidMount() {
-    console.log('yooooo', this.props.match.params.id);
     axios
       .get(`/api/posts?pageid=${this.props.match.params.id}`)
       .then(res => {
@@ -27,19 +26,24 @@ class MainPage extends React.Component {
     return (
       <div>
         <h3>ID: {this.props.match.params.id}</h3>
-        <SubmitPost pageid={this.props.match.params.id} />
+        <SubmitPost 
+          pageid={this.props.match.params.id}
+          reRender={this.componentDidMount.bind(this)}
+        />
         {this.state.posts.map(post => (
-          <Posts
-            id={post.id}
-            votes={post.votes}
-            title={post.title}
-            link={post.link}
-            reRender={this.componentDidMount.bind(this)}
-          />
+          <div key={post.id}>
+            <Posts
+              id={post.id}
+              votes={post.votes}
+              title={post.title}
+              link={post.link}
+              reRender={this.componentDidMount.bind(this)}
+            />
+          </div>
         ))}
       </div>
     );
   }
 }
 
-export default MainPage;
+export default DisplayPage;

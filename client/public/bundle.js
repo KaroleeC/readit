@@ -19690,6 +19690,10 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _axios = __webpack_require__(88);
+
+var _axios2 = _interopRequireDefault(_axios);
+
 var _reactRouterDom = __webpack_require__(50);
 
 var _displayPage = __webpack_require__(49);
@@ -19706,8 +19710,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // dropdown of users liked subs
-// site navigation
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 // id defualt set to main but change on button click
 var Header = function (_React$Component) {
@@ -19719,12 +19722,26 @@ var Header = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).call(this, props));
 
     _this.state = {
-      id: 'Main'
+      id: 'Main',
+      subs: []
     };
     return _this;
   }
 
   _createClass(Header, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      var _this2 = this;
+
+      // axios request to get pages
+      _axios2.default.get('/api/subs').then(function (res) {
+        _this2.setState({ subs: res.data });
+        console.log('Header STATE', _this2.state.subs);
+      }).catch(function (err) {
+        console.log('Get Subs err', err);
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -19736,6 +19753,15 @@ var Header = function (_React$Component) {
           _react2.default.createElement(
             'ul',
             null,
+            _react2.default.createElement(
+              'li',
+              null,
+              _react2.default.createElement(
+                _reactRouterDom.Link,
+                { to: '/${sub}' },
+                'Main'
+              )
+            ),
             _react2.default.createElement(
               'li',
               null,
@@ -19898,24 +19924,23 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var MainPage = function (_React$Component) {
-  _inherits(MainPage, _React$Component);
+var DisplayPage = function (_React$Component) {
+  _inherits(DisplayPage, _React$Component);
 
-  function MainPage(props) {
-    _classCallCheck(this, MainPage);
+  function DisplayPage(props) {
+    _classCallCheck(this, DisplayPage);
 
-    var _this = _possibleConstructorReturn(this, (MainPage.__proto__ || Object.getPrototypeOf(MainPage)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (DisplayPage.__proto__ || Object.getPrototypeOf(DisplayPage)).call(this, props));
 
     _this.state = { posts: [] };
     return _this;
   }
 
-  _createClass(MainPage, [{
+  _createClass(DisplayPage, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
       var _this2 = this;
 
-      console.log('yooooo', this.props.match.params.id);
       _axios2.default.get('/api/posts?pageid=' + this.props.match.params.id).then(function (res) {
         _this2.setState({ posts: res.data }, function () {
           console.log(_this2.state.posts);
@@ -19938,24 +19963,31 @@ var MainPage = function (_React$Component) {
           'ID: ',
           this.props.match.params.id
         ),
-        _react2.default.createElement(_submitPost2.default, { pageid: this.props.match.params.id }),
+        _react2.default.createElement(_submitPost2.default, {
+          pageid: this.props.match.params.id,
+          reRender: this.componentDidMount.bind(this)
+        }),
         this.state.posts.map(function (post) {
-          return _react2.default.createElement(_displayPost2.default, {
-            id: post.id,
-            votes: post.votes,
-            title: post.title,
-            link: post.link,
-            reRender: _this3.componentDidMount.bind(_this3)
-          });
+          return _react2.default.createElement(
+            'div',
+            { key: post.id },
+            _react2.default.createElement(_displayPost2.default, {
+              id: post.id,
+              votes: post.votes,
+              title: post.title,
+              link: post.link,
+              reRender: _this3.componentDidMount.bind(_this3)
+            })
+          );
         })
       );
     }
   }]);
 
-  return MainPage;
+  return DisplayPage;
 }(_react2.default.Component);
 
-exports.default = MainPage;
+exports.default = DisplayPage;
 
 /***/ }),
 /* 50 */
@@ -23720,10 +23752,8 @@ var Posts = function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      console.log('post com mount ', this.props.id);
       _axios2.default.get('/api/comments?postid=' + this.props.id).then(function (res) {
         _this2.setState({ comments: res.data });
-        console.log('STATE IN POST', _this2.state.comments);
       }).catch(function (err) {
         console.log('DisplayPost get', err);
       });
@@ -23800,17 +23830,22 @@ var Posts = function (_React$Component) {
         this.props.title,
         this.props.link,
         this.state.comments.map(function (comment) {
-          return _react2.default.createElement(_displayComment2.default, {
-            id: comment.id,
-            votes: comment.votes,
-            title: comment.title,
-            downVote: _this3.DownVoteClickHandler,
-            upVote: _this3.VoteClickHandler,
-            reRender: _this3.componentDidMount.bind(_this3)
-          });
+          return _react2.default.createElement(
+            'div',
+            { key: comment.id },
+            _react2.default.createElement(_displayComment2.default, {
+              id: comment.id,
+              votes: comment.votes,
+              title: comment.title,
+              downVote: _this3.DownVoteClickHandler,
+              upVote: _this3.VoteClickHandler,
+              reRender: _this3.componentDidMount.bind(_this3)
+            })
+          );
         }),
         _react2.default.createElement(_submitComment2.default, {
-          postid: this.props.id
+          postid: this.props.id,
+          reRender: this.props.reRender
         })
       );
     }
@@ -25536,6 +25571,7 @@ var SubmitPost = function (_React$Component) {
 
       _axios2.default.post('/api/posts', payload).then(function (res) {
         console.log('POST on submit handler');
+        reRender();
       }).catch(function (err) {
         console.log('Submit post err', err);
       });
@@ -25607,6 +25643,8 @@ var _axios = __webpack_require__(88);
 
 var _axios2 = _interopRequireDefault(_axios);
 
+var _reactRedux = __webpack_require__(297);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25663,7 +25701,6 @@ var SubmitComment = function (_React$Component) {
         _react2.default.createElement(
           'button',
           { onClick: function onClick() {
-              console.log("submit post click");
               _this2.OnSubmitHandler(event);
             } },
           ' Submit '
@@ -25675,7 +25712,11 @@ var SubmitComment = function (_React$Component) {
   return SubmitComment;
 }(_react2.default.Component);
 
-exports.default = SubmitComment;
+function mapStateToProps(state) {
+  return { user: state.user };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(SubmitComment);
 
 /***/ }),
 /* 110 */,
