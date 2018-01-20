@@ -11,6 +11,8 @@ class Header extends React.Component {
       id: 'Main',
       subs: [],
     };
+
+    this.OnSubmitHandler = this.OnSubmitHandler.bind(this);
   }
 
   componentWillMount() {
@@ -26,14 +28,43 @@ class Header extends React.Component {
       });
   }
 
+  OnSubmitHandler(event) {
+    let payload = {
+      name: this.refs.SUB.value
+    }
+    console.log('click', this.refs.SUB.value);
+    axios.post('/api/subs', payload).then(res => {
+      console.log('POST on submit page');
+    })
+    .catch(err => {
+      console.log('Submit page err', err);
+    });
+
+  }
+
+
+
+  // renderRoomsList() {
+  //   return ( this.state.subs.map(room =>{
+  //     <li>
+  //       <Link to='/${room}'>${room}</Link>
+  //     </li>
+  //   })
+
+  // )}
+
   render() {
     return (
+      <div>
+        <input placeholder="Enter your new Sub page" ref="SUB" />
+      <button onClick={() => {
+            console.log("submit post click");
+            this.OnSubmitHandler(event);
+          }}> Add a new Room </button>
       <Router>
         <div>
           <ul>
-            <li>
-              <Link to='/${sub}'>Main</Link>
-            </li>
+           
             <li>
               <Link to="/Main">Main</Link>
             </li>
@@ -44,8 +75,9 @@ class Header extends React.Component {
           <Route path="/:id" component={DisplayPage} />
         </div>
       </Router>
+      </div>
     );
-  }
+  } 
 }
 
 export default Header;
