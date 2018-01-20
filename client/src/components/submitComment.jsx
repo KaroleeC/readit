@@ -12,6 +12,7 @@ class SubmitComment extends React.Component {
       <div>
         <p>Comment</p>
         <input placeholder="Enter your comment HERE" />
+        <button> Submit </button>
       </div>
     );
   }

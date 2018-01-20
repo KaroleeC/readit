@@ -5,6 +5,7 @@ import Login from './login';
 function App() {
   return (
     <div className="container">
+      <Login />
       <Header />
     </div>
   );

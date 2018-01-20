@@ -5,19 +5,18 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import MainPage from './displayPage';
 import Login from './login';
-//id defualt set to main but change on button click
+// id defualt set to main but change on button click
 class Header extends React.Component {
   constructor(props) {
     super(props);
-    this.state ={
-      id: "Main"
-    }
-
+    this.state = {
+      id: 'Main',
+    };
   }
 
   render() {
     return (
-        <Router>
+      <Router>
         <div>
           <ul>
             <li>
@@ -27,7 +26,6 @@ class Header extends React.Component {
               <Link to="/Check">Check</Link>
             </li>
           </ul>
-
           <Route path="/:id" component={MainPage} />
         </div>
       </Router>

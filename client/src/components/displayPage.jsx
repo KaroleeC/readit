@@ -27,7 +27,7 @@ class MainPage extends React.Component {
     return (
       <div>
         <h3>ID: {this.props.match.params.id}</h3>
-        <SubmitPost/>
+        <SubmitPost pageid={this.props.match.params.id} />
         {this.state.posts.map(post => (
           <Posts
             id={post.id}

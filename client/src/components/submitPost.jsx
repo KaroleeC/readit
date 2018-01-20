@@ -12,9 +12,10 @@ class SubmitPost extends React.Component {
       <div>
         <p>Submit a new Post</p>
         <p>URL</p>
-        <input  />
+        <input  placeholder="Enter your URL"/>
         <p>title</p>
-        <input  />
+        <input  placeholder="Enter your title"/>
+        <button> Submit </button>
       </div>
     );
   }
