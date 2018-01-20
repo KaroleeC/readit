@@ -19927,6 +19927,8 @@ var MainPage = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _this3 = this;
+
       return _react2.default.createElement(
         'div',
         null,
@@ -19942,7 +19944,8 @@ var MainPage = function (_React$Component) {
             id: post.id,
             votes: post.votes,
             title: post.title,
-            link: post.link
+            link: post.link,
+            reRender: _this3.componentDidMount.bind(_this3)
           });
         })
       );
@@ -23706,6 +23709,9 @@ var Posts = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (Posts.__proto__ || Object.getPrototypeOf(Posts)).call(this, props));
 
     _this.state = { comments: [] };
+
+    _this.VoteClickHandler = _this.VoteClickHandler.bind(_this);
+    _this.DownVoteClickHandler = _this.DownVoteClickHandler.bind(_this);
     return _this;
   }
 
@@ -23723,8 +23729,46 @@ var Posts = function (_React$Component) {
       });
     }
   }, {
+    key: 'VoteClickHandler',
+    value: function VoteClickHandler(votes, postid, renderFunc) {
+      // pass in this.props.id
+      // take current value of votes and do a put request to increase by one
+      console.log('post com mount ', votes);
+      var newvote = votes + 1;
+      var payload = {
+        id: postid,
+        votes: newvote
+      };
+      _axios2.default.put('/api/posts', payload).then(function (res) {
+        console.log('PUT Ran in upclick handler');
+        renderFunc();
+      }).catch(function (err) {
+        console.log('Up click err', err);
+      });
+    }
+  }, {
+    key: 'DownVoteClickHandler',
+    value: function DownVoteClickHandler(votes, postid, renderFunc) {
+      // pass in this.props.id
+      // take current value of votes and do a put request to increase by one
+      console.log('post com mount ', votes);
+      var newvote = votes - 1;
+      var payload = {
+        id: postid,
+        votes: newvote
+      };
+      _axios2.default.put('/api/posts', payload).then(function (res) {
+        console.log('PUT Ran in upclick handler');
+        renderFunc();
+      }).catch(function (err) {
+        console.log('Up click err', err);
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _this3 = this;
+
       return _react2.default.createElement(
         'div',
         { key: this.props.id },
@@ -23735,13 +23779,17 @@ var Posts = function (_React$Component) {
         ),
         _react2.default.createElement(
           'button',
-          null,
+          { onClick: function onClick() {
+              _this3.VoteClickHandler(_this3.props.votes, _this3.props.id, _this3.props.reRender);
+            } },
           ' up '
         ),
         this.props.votes,
         _react2.default.createElement(
           'button',
-          null,
+          { onClick: function onClick() {
+              _this3.DownVoteClickHandler(_this3.props.votes, _this3.props.id, _this3.props.reRender);
+            } },
           ' down '
         ),
         _react2.default.createElement(
@@ -23755,10 +23803,15 @@ var Posts = function (_React$Component) {
           return _react2.default.createElement(_displayComment2.default, {
             id: comment.id,
             votes: comment.votes,
-            title: comment.title
+            title: comment.title,
+            downVote: _this3.DownVoteClickHandler,
+            upVote: _this3.VoteClickHandler,
+            reRender: _this3.componentDidMount.bind(_this3)
           });
         }),
-        _react2.default.createElement(_submitComment2.default, null)
+        _react2.default.createElement(_submitComment2.default, {
+          postid: this.props.id
+        })
       );
     }
   }]);
@@ -25383,6 +25436,8 @@ var Comments = function (_React$Component) {
   _createClass(Comments, [{
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       return _react2.default.createElement(
         'div',
         { key: this.props.id },
@@ -25393,13 +25448,17 @@ var Comments = function (_React$Component) {
         ),
         _react2.default.createElement(
           'button',
-          null,
+          { onClick: function onClick() {
+              _this2.props.upVote(_this2.props.votes, _this2.props.id, _this2.props.reRender);
+            } },
           ' up '
         ),
         this.props.votes,
         _react2.default.createElement(
           'button',
-          null,
+          { onClick: function onClick() {
+              _this2.props.downVote(_this2.props.votes, _this2.props.id, _this2.props.reRender);
+            } },
           ' down '
         ),
         _react2.default.createElement(
@@ -25566,24 +25625,47 @@ var SubmitComment = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (SubmitComment.__proto__ || Object.getPrototypeOf(SubmitComment)).call(this, props));
 
     _this.state = {};
+    _this.OnSubmitHandler = _this.OnSubmitHandler.bind(_this);
     return _this;
   }
 
   _createClass(SubmitComment, [{
+    key: 'OnSubmitHandler',
+    value: function OnSubmitHandler(event) {
+      var payload = {
+        votes: 0,
+        type: 1,
+        postid: this.props.postid,
+        userid: this.props.user.name,
+        title: this.refs.TEXT.value
+      };
+
+      _axios2.default.post('/api/posts', payload).then(function (res) {
+        console.log('POST on submit handler');
+      }).catch(function (err) {
+        console.log('Submit post err', err);
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       return _react2.default.createElement(
         'div',
         null,
         _react2.default.createElement(
           'p',
           null,
-          'Comment'
+          ' Submit a new comment'
         ),
-        _react2.default.createElement('input', { placeholder: 'Enter your comment HERE' }),
+        _react2.default.createElement('input', { placeholder: 'Enter your comment HERE', ref: 'TEXT' }),
         _react2.default.createElement(
           'button',
-          null,
+          { onClick: function onClick() {
+              console.log("submit post click");
+              _this2.OnSubmitHandler(event);
+            } },
           ' Submit '
         )
       );

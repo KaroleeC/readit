@@ -5,14 +5,36 @@ class SubmitComment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.OnSubmitHandler = this.OnSubmitHandler.bind(this);
+  }
+
+  OnSubmitHandler(event) {
+    const payload = {
+      votes: 0,
+      type: 1,
+      postid: this.props.postid,
+      userid: this.props.user.name,
+      title: this.refs.TEXT.value
+    }
+
+    axios.post('/api/posts', payload ).then(res => {
+      console.log('POST on submit handler');
+    })
+    .catch(err => {
+      console.log('Submit post err', err);
+    });
+
   }
 
   render() {
     return (
       <div>
-        <p>Comment</p>
-        <input placeholder="Enter your comment HERE" />
-        <button> Submit </button>
+        <p> Submit a new comment</p>
+        <input placeholder="Enter your comment HERE" ref="TEXT" />
+        <button onClick={() => {
+        console.log("submit post click");
+        this.OnSubmitHandler(event);
+      }}> Submit </button>
       </div>
     );
   }

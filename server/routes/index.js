@@ -17,10 +17,12 @@ router
 router
   .route('/posts')
   .get(postsController.getPosts)
-  .post(postsController.createPosts);
+  .post(postsController.createPosts)
+  .put(postsController.changeVote);
 router
   .route('/comments')
   .get(commentsController.getComment)
   .post(commentsController.createComment);
+
 
 module.exports = router;

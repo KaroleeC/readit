@@ -34,6 +34,7 @@ class MainPage extends React.Component {
             votes={post.votes}
             title={post.title}
             link={post.link}
+            reRender={this.componentDidMount.bind(this)}
           />
         ))}
       </div>

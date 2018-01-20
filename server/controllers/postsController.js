@@ -20,13 +20,28 @@ const postsController = {
       .catch(err => console.error('postsController create', err));
   },
   getPosts: (req, res) => {
-    console.log('GETPOST REQ.BODY ', req.body);
+    //  where: { pageid: req.query.pageid, type: 0 } 
     posts
-      .findAll({ where:{ pageid: req.query.pageid, type: 0 } })
+      .findAll({where: { pageid: req.query.pageid, type: 0 } })
       .then(data => {
         res.status(200).send(data);
       })
       .catch(err => console.error('postsController get', err));
+  },
+  changeVote: (req, res) => {
+    console.log('Change posts RAN', req.body);
+
+    posts
+      .findById(req.body.id)
+      .then(post => post.update({ votes: req.body.votes }))
+      .then(data => {
+        console.log('PUT SUCCESS');
+        res.status(200).send(data);
+      })
+      .catch(err => {
+        console.log('PUT FAIL');
+        res.status(500).send(err);
+      });
   },
 };
 

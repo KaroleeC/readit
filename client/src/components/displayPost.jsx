@@ -7,6 +7,9 @@ class Posts extends React.Component {
   constructor(props) {
     super(props);
     this.state = { comments: [] };
+
+    this.VoteClickHandler = this.VoteClickHandler.bind(this);
+    this.DownVoteClickHandler = this.DownVoteClickHandler.bind(this);
   }
 
   componentDidMount() {
@@ -22,13 +25,56 @@ class Posts extends React.Component {
       });
   }
 
+  VoteClickHandler(votes, postid, renderFunc) {
+    // pass in this.props.id
+    // take current value of votes and do a put request to increase by one
+    console.log('post com mount ', votes);
+    const newvote =votes+1
+    let payload = {
+      id: postid,
+      votes: newvote
+    };
+    axios
+      .put('/api/posts', payload)
+      .then(res => {
+        console.log('PUT Ran in upclick handler');
+        renderFunc()
+      })
+      .catch(err => {
+        console.log('Up click err', err);
+      });
+      
+  }
+
+  DownVoteClickHandler(votes, postid, renderFunc) {
+    // pass in this.props.id
+    // take current value of votes and do a put request to increase by one
+    console.log('post com mount ', votes);
+    const newvote =votes-1
+    let payload = {
+      id: postid,
+      votes: newvote
+    };
+    axios
+      .put('/api/posts', payload)
+      .then(res => {
+        console.log('PUT Ran in upclick handler');
+        renderFunc()
+      })
+      .catch(err => {
+        console.log('Up click err', err);
+      });
+  }
+
   render() {
     return (
       <div key={this.props.id}>
         <p>***POST***</p>
-        <button> up </button>
+        <button onClick={() => { 
+          this.VoteClickHandler(this.props.votes, this.props.id, this.props.reRender) } }> up </button>
         {this.props.votes}
-        <button> down </button>
+        <button onClick={() => { 
+          this.DownVoteClickHandler(this.props.votes, this.props.id, this.props.reRender) } } > down </button>
         <p>User Name</p>
         {this.props.title}
         {this.props.link}
@@ -37,9 +83,14 @@ class Posts extends React.Component {
             id={comment.id}
             votes={comment.votes}
             title={comment.title}
+            downVote={this.DownVoteClickHandler}
+            upVote={this.VoteClickHandler}
+            reRender={this.componentDidMount.bind(this)}
           />
         ))}
-        <SubmitComment />
+        <SubmitComment 
+        postid={this.props.id}
+        />
       </div>
     );
   }
