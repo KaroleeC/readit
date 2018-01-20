@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Comments from './displayComment';
 import SubmitComment from './submitComment';
+import { connect } from 'react-redux';
 // display posts by passed down subpage tag
 class Posts extends React.Component {
   constructor(props) {
@@ -10,6 +11,7 @@ class Posts extends React.Component {
 
     this.VoteClickHandler = this.VoteClickHandler.bind(this);
     this.DownVoteClickHandler = this.DownVoteClickHandler.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
   }
 
   componentDidMount() {
@@ -17,6 +19,7 @@ class Posts extends React.Component {
       .get(`/api/comments?postid=${this.props.id}`)
       .then(res => {
         this.setState({ comments: res.data });
+        console.log('comments ', this.state.comments)
       })
       .catch(err => {
         console.log('DisplayPost get', err);
@@ -67,17 +70,16 @@ class Posts extends React.Component {
   render() {
     return (
       <div key={this.props.id}>
-        <p>***POST***</p>
+        <h2><a href={this.props.link} target="_blank">{this.props.title}</a></h2>
         <button onClick={() => { this.VoteClickHandler(this.props.votes, this.props.id, this.props.reRender) } }> up </button>
         {this.props.votes}
         <button onClick={() => { this.DownVoteClickHandler(this.props.votes, this.props.id, this.props.reRender) } } > down </button>
-        <p>User Name</p>
-        {this.props.title}
-        {this.props.link}
+         <p> Posted by: {this.props.username}</p>
         {this.state.comments.map(comment => (
           <div key={comment.id}>
             <Comments
               id={comment.id}
+              username={comment.username}
               votes={comment.votes}
               title={comment.title}
               downVote={this.DownVoteClickHandler}
@@ -88,11 +90,17 @@ class Posts extends React.Component {
         ))}
         <SubmitComment 
         postid={this.props.id}
-        reRender={this.props.reRender}
+        reRender={this.componentDidMount}
         />
       </div>
     );
   }
 }
 
-export default Posts;
+function mapStateToProps(state) {
+  return { user: state.user };
+}
+
+export default connect(mapStateToProps)(Posts);
+
+//export default Posts;

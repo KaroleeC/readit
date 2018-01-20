@@ -10,11 +10,11 @@ class Comments extends React.Component {
   render() {
     return (
       <div key={this.props.id}>
-        <p>***Comment***</p>
+        <p>*******Comment*******</p>
+        <p>USER: {this.props.username}</p>
         <button onClick={() => { this.props.upVote(this.props.votes, this.props.id, this.props.reRender)} }> up </button>
         {this.props.votes}
         <button onClick={() => { this.props.downVote(this.props.votes, this.props.id, this.props.reRender)} } > down </button>
-        <p> this should also have the user name</p>
         {this.props.title}
       </div>
     );

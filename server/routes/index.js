@@ -24,5 +24,4 @@ router
   .get(commentsController.getComment)
   .post(commentsController.createComment);
 
-
 module.exports = router;

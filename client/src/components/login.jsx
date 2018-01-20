@@ -22,10 +22,7 @@ class Login extends React.Component {
             this.props.changeUser(this.refs.userText.value);
             console.log(this.props.user.name);
           }}
-        >
-          {' '}
-          Login{' '}
-        </button>
+        >Login</button>
       </div>
     );
   }

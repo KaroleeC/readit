@@ -7,6 +7,7 @@ class DisplayPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = { posts: [] };
+    this.componentDidMount = this.componentDidMount.bind(this)
   }
 
   componentDidMount() {
@@ -28,11 +29,12 @@ class DisplayPage extends React.Component {
         <h3>ID: {this.props.match.params.id}</h3>
         <SubmitPost 
           pageid={this.props.match.params.id}
-          reRender={this.componentDidMount.bind(this)}
+          reRender={this.componentDidMount}
         />
         {this.state.posts.map(post => (
           <div key={post.id}>
             <Posts
+              username={post.username}
               id={post.id}
               votes={post.votes}
               title={post.title}

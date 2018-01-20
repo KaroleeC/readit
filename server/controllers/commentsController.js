@@ -8,7 +8,7 @@ const commentsController = {
         title: req.body.title,
         votes: req.body.votes,
         type: req.body.type,
-        userid: req.body.userid,
+        username: req.body.username,
         postid: req.body.postid,
       })
       .then(() => {

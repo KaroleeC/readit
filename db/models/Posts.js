@@ -27,6 +27,10 @@ const posts = database.define('Posts', {
     type: Sequelize.STRING,
     required: false,
   },
+  username: {
+    type: Sequelize.STRING,
+    required: false,
+  },
   postid: {
     type: Sequelize.INTEGER,
     required: true,

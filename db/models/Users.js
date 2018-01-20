@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const database = require('../index');
 
 const users = database.define('users', {
-  id: {
+  userid: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true,

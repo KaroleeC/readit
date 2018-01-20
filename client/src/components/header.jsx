@@ -13,28 +13,36 @@ class Header extends React.Component {
     };
 
     this.OnSubmitHandler = this.OnSubmitHandler.bind(this);
+    this.RenderRoomsList = this.RenderRoomsList.bind(this);
+    this.GetPageHandler = this.GetPageHandler.bind(this);
   }
+
+GetPageHandler() {
+  axios
+    .get('/api/subs')
+    .then(res => {
+      this.setState({ subs: res.data });
+      console.log('Header STATE', this.state.subs )
+    })
+    .catch(err => {
+      console.log('Get Subs err', err);
+    });
+
+}
 
   componentWillMount() {
     // axios request to get pages
-    axios
-      .get('/api/subs')
-      .then(res => {
-        this.setState({ subs: res.data });
-        console.log('Header STATE', this.state.subs )
-      })
-      .catch(err => {
-        console.log('Get Subs err', err);
-      });
+    this.GetPageHandler();
   }
 
   OnSubmitHandler(event) {
     let payload = {
       name: this.refs.SUB.value
     }
-    console.log('click', this.refs.SUB.value);
     axios.post('/api/subs', payload).then(res => {
       console.log('POST on submit page');
+      this.GetPageHandler();
+      document.getElementById('newpage').value = '';
     })
     .catch(err => {
       console.log('Submit page err', err);
@@ -44,33 +52,31 @@ class Header extends React.Component {
 
 
 
-  // renderRoomsList() {
-  //   return ( this.state.subs.map(room =>{
-  //     <li>
-  //       <Link to='/${room}'>${room}</Link>
-  //     </li>
-  //   })
+  RenderRoomsList() {
+   return( this.state.subs.map(sub => {
 
-  // )}
+      return <li> <Link to={'/'+sub.name} > {sub.name} </Link></li>
+
+    })
+  )
+  }
 
   render() {
     return (
       <div>
-        <input placeholder="Enter your new Sub page" ref="SUB" />
-      <button onClick={() => {
+        <input id="newpage" placeholder="Enter your new Sub page" ref="SUB" />
+        <button onClick={() => {
             console.log("submit post click");
             this.OnSubmitHandler(event);
-          }}> Add a new Room </button>
+          }}> Add a new Page!</button>
+
       <Router>
         <div>
           <ul>
-           
             <li>
               <Link to="/Main">Main</Link>
             </li>
-            <li>
-              <Link to="/Check">Check</Link>
-            </li>
+            {this.RenderRoomsList()}
           </ul>
           <Route path="/:id" component={DisplayPage} />
         </div>

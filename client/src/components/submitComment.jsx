@@ -14,12 +14,13 @@ class SubmitComment extends React.Component {
       votes: 0,
       type: 1,
       postid: this.props.postid,
-      userid: this.props.user.name,
+      username: this.props.user.name,
       title: this.refs.TEXT.value
     }
 
     axios.post('/api/posts', payload ).then(res => {
       console.log('POST on submit handler');
+      this.props.reRender()
     })
     .catch(err => {
       console.log('Submit post err', err);
@@ -45,4 +46,4 @@ function mapStateToProps(state) {
   return { user: state.user };
 }
 
-export default connect(mapStateToProps )(SubmitComment);
+export default connect(mapStateToProps)(SubmitComment);

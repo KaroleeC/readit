@@ -10,7 +10,7 @@ const postsController = {
         votes: req.body.votes,
         type: req.body.type,
         pageid: req.body.pageid,
-        userid: req.body.userid,
+        username: req.body.username,
         postid: req.body.postid,
       })
       .then(() => {

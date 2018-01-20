@@ -7,22 +7,22 @@ class SubmitPost extends React.Component {
     super(props);
     this.state = {};
 
-    this.OnSubmitHandler = this.OnSubmitHandler.bind(this);
+    this.PostSubmitHandler = this.PostSubmitHandler.bind(this);
   }
 
-  OnSubmitHandler(event) {
+  PostSubmitHandler(event) {
     const payload = {
       link: this.refs.URL.value,
       votes: 0,
       type: 0,
       pageid: this.props.pageid,
-      userid: this.props.user.name,
+      username: this.props.user.name,
       title: this.refs.TITLE.value
     }
 
     axios.post('/api/posts', payload ).then(res => {
-      console.log('POST on submit handler');
-      reRender()
+      console.log('POST on submit handler RAN!!!');
+      this.props.reRender()
     })
     .catch(err => {
       console.log('Submit post err', err);
@@ -35,12 +35,12 @@ class SubmitPost extends React.Component {
       <div>
         <p>Submit a new Post</p>
         <p>URL</p>
-        <input placeholder="Enter your URL" ref="URL" />
+        <input id="input" placeholder="Enter your URL" ref="URL" />
         <p>title</p>
-        <input placeholder="Enter your title" ref="TITLE" />
+        <input id="input" placeholder="Enter your title" ref="TITLE" />
         <button onClick={() => {
             console.log("submit post click");
-            this.OnSubmitHandler(event);
+            this.PostSubmitHandler(event);
           }}> Submit </button>
       </div>
     );
